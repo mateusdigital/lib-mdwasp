@@ -106,16 +106,12 @@ export function SetupRoutesWithController(controller: any, app: any)
     controller.routes,
     "Controller routes are null - Did set them as static on the controller?");
 
-  // The async handler is used so we can setup a default error handler
-  // that will catch any exceptions thrown by the controller.
-  const async_handler = (fn: any) => (req: any,
-                                      res: any,
-                                      next: any) => { //
-    Promise.resolve(fn(req, res, next)).catch(next);
-  };
+  const async_handler  = (fn: any) =>
+    (req: any,
+     res: any,
+     next: any)       => { Promise.resolve(fn(req, res, next)).catch(next); };
 
   for (const route of controller.routes) {
-    let func: any = null;
     if (route.method === 'post') {
       if (route.schema) {
         app.post(`/api${route.route}`,
@@ -123,7 +119,7 @@ export function SetupRoutesWithController(controller: any, app: any)
                  async_handler(route.handler));
       }
       else {
-        app.post(`/api${route.route}`, route.handler);
+        app.post(`/api${route.route}`, async_handler(route.handler));
       }
     }
     else if (route.method === 'get') {
@@ -133,7 +129,7 @@ export function SetupRoutesWithController(controller: any, app: any)
                 async_handler(route.handler));
       }
       else {
-        app.get(`/api${route.route}`, route.handler);
+        app.get(`/api${route.route}`, async_handler(route.handler));
       }
     }
     else if (route.method === 'delete') {
@@ -143,7 +139,7 @@ export function SetupRoutesWithController(controller: any, app: any)
                    async_handler(route.handler));
       }
       else {
-        app.delete(`/api${route.route}`, route.handler);
+        app.delete(`/api${route.route}`, async_handler(route.handler));
       }
     }
   }

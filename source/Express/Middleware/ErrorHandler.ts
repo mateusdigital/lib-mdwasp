@@ -40,4 +40,8 @@ export function _ErrorHandler(
 }
 
 // -----------------------------------------------------------------------------
-export function SetupErrorHandler(app: any) { app.use(_ErrorHandler); }
+export function SetupErrorHandler(app: any)
+{
+  //
+  app.use(_ErrorHandler);
+}
