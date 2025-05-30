@@ -30,7 +30,7 @@ import {SetupHttpLogger} from "./Middleware/HTTPLogger";
 // -----------------------------------------------------------------------------
 import {
   SetupHeathCheckRoutes,
-  SetupServiceInfoRoutes
+  SetupServiceInfoPage
 } from "../Routes/DefaultRoutes";
 
 //
@@ -92,7 +92,7 @@ export class App
     SetupHeathCheckRoutes(
       g_ExpressApp, {packageJson, env : process.env}, "/api");
 
-    SetupServiceInfoRoutes(g_ExpressApp, path.join(publicPath, "index.html"));
+    SetupServiceInfoPage(g_ExpressApp, path.join(publicPath, "index.html"));
   }
 
   // ---------------------------------------------------------------------------

@@ -46,7 +46,7 @@ export function SetupHeathCheckRoutes(
 }
 
 // -----------------------------------------------------------------------------
-export function SetupServiceInfoRoutes(app: any, filepath: string)
+export function SetupServiceInfoPage(app: any, filepath: string)
 {
   app.get("/", (req: any, res: any) => { res.sendFile(filepath); });
 }
