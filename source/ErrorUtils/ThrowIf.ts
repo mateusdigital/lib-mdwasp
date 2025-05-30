@@ -68,6 +68,13 @@ export function ThrowIfNotValidObjectId(value: any)
 }
 
 // -----------------------------------------------------------------------------
+export function ThrowIfNotAuthorized(auth: any, params: any = {}, msg: string = "Unauthorized")
+{
+  return true;
+}
+
+
+// -----------------------------------------------------------------------------
 export function ThrowIfEmptyOrNull(value: any, msg: string)
 {
   // Check for null or undefined
