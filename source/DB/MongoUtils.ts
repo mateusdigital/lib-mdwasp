@@ -19,34 +19,41 @@
 //  Description :                                                             //
 //                                                                            //
 //----------------------------------------------------------------------------//
+
 // -----------------------------------------------------------------------------
 import mongoose from "mongoose";
 // -----------------------------------------------------------------------------
-import {Assert} from "../Assert";
-import {Logger} from "../Logger";
+import { Assert } from "../Assert";
+import { Logger } from "../Logger";
 
 //
 // Types
 //
 
 // -----------------------------------------------------------------------------
-export type SoftObjectId = mongoose.ObjectId|string|unknown;
+export type SoftObjectId = mongoose.ObjectId | string | unknown;
 
 //
 // Class
 //
 
 // -----------------------------------------------------------------------------
-export class MongoUtils
-{
+interface ConnectionOptions {
+  MONGO_URI: string,
+  MONGO_USER: string,
+  MONGO_PASSWORD: string
+}
+
+
+// -----------------------------------------------------------------------------
+export class MongoUtils {
 
   //
   //
   //
 
   // ---------------------------------------------------------------------------
-  static IdEqual(id1: SoftObjectId, id2: SoftObjectId)
-  {
+  static IdEqual(id1: SoftObjectId, id2: SoftObjectId) {
     if (id1 === id2) {
       return true;
     }
@@ -61,28 +68,27 @@ export class MongoUtils
   // Connection
   //
 
+
+
   // ---------------------------------------------------------------------------
-  static MakeMongooseConnect(appObj: any,
-                             mongooseObj: any,
-                             envObj: any,
-                             packageJson: any,
-                             onConnected: any,
-                             onError: any)
-  {
+  static MakeMongooseConnect(options: ConnectionOptions,
+    onConnected: any,
+    onError: any) {
     //
-    Assert(envObj.MONGO_URI, "==> Missing envObj.MONGO_URL");
-    Assert(envObj.MONGO_USER, "==> Missing envObj.MONGO_USER");
-    Assert(envObj.MONGO_PASSWORD, "==> Missing envObj.MONGO_PASSWORD");
+    Assert(options.MONGO_URI, "==> Missing envObj.MONGO_URL");
+    Assert(options.MONGO_USER, "==> Missing envObj.MONGO_USER");
+    Assert(options.MONGO_PASSWORD, "==> Missing envObj.MONGO_PASSWORD");
 
     //
     const api_port = 3000; // META_PORTS.GetServicePort(packageJson.name);
 
-    const mongo_uri      = envObj.MONGO_URI as string;
-    const mongo_user     = envObj.MONGO_USER as string;
-    const mongo_password = envObj.MONGO_PASSWORD as string;
+    const mongo_uri = options.MONGO_URI as string;
+    const mongo_user = options.MONGO_USER as string;
+    const mongo_password = options.MONGO_PASSWORD as string;
 
-    const conn_str = mongo_uri.replace("MONGO_PASSWORD", mongo_password)
-                       .replace("MONGO_USER", mongo_user);
+    const conn_str = mongo_uri
+      .replace("MONGO_PASSWORD", mongo_password)
+      .replace("MONGO_USER", mongo_user);
 
     //
     Logger.Debug(`Starting to connect to MongoDB`);
@@ -93,39 +99,17 @@ export class MongoUtils
     Logger.Debug(`Connection Str: ${conn_str}`);
 
     //
-    mongooseObj.connect(conn_str)
+    mongoose.connect(conn_str)
       .then(() => {
         //
-        MongoUtils._OnMongooseConnected(appObj, api_port, conn_str, onConnected);
+        Logger.Info("Connected to MongoDB");
+        onConnected(api_port);
       })
       .catch((err: any) => {
         //
-        MongoUtils._OnMongooseError(err, onError);
+        Logger.Fatal(`Error connecting to MongoDB: ${err}`);
+        onError(err);
       });
-  }
-
-  //
-  // Private Functions
-  //
-
-  // ---------------------------------------------------------------------------
-  static _OnMongooseConnected(appObj: any,
-                              api_port: any,
-                              conn_str: any,
-                              onConnectedCallback: any)
-  {
-    Logger.Info("Connected to MongoDB");
-    Logger.Debug(`Connection String: ${conn_str}`);
-
-    //
-    onConnectedCallback(appObj, api_port);
-  }
-
-  // ---------------------------------------------------------------------------
-  static _OnMongooseError(err: any, onErrorCallback: any)
-  {
-    Logger.Fatal(`Error connecting to MongoDB: ${err}`);
-    onErrorCallback(err);
   }
 
   //
@@ -133,8 +117,7 @@ export class MongoUtils
   //
 
   // ---------------------------------------------------------------------------
-  static IsValidObjectId(id: any)
-  {
+  static IsValidObjectId(id: any) {
     const is_valid = mongoose.Types.ObjectId.isValid(id);
     return is_valid;
   }
