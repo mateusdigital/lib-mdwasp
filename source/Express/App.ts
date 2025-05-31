@@ -77,7 +77,7 @@ export class App
   }
 
   // ---------------------------------------------------------------------------
-  public static Init({corsOptions, publicPath, packageJson}: any)
+  public static Init({corsOptions, publicPath = "", packageJson = {}}: any)
   {
     g_ExpressApp = express();
     g_ExpressApp.use(cors(corsOptions || _CORS_OPTIONS_DEFAULT));
