@@ -71,13 +71,13 @@ export class MongoUtils {
 
 
   // ---------------------------------------------------------------------------
-  static MakeMongooseConnect(options: ConnectionOptions,
-    onConnected: any,
-    onError: any) {
+  static async MakeMongooseConnect(options: ConnectionOptions,
+    onConnected: any = (port: number) => {},
+    onError: any = (err: any) => {}) {
     //
-    Assert(options.MONGO_URI, "==> Missing envObj.MONGO_URL");
-    Assert(options.MONGO_USER, "==> Missing envObj.MONGO_USER");
-    Assert(options.MONGO_PASSWORD, "==> Missing envObj.MONGO_PASSWORD");
+    Assert(options.MONGO_URI, `==> Missing envObj.MONGO_URI`, options);
+    Assert(options.MONGO_USER, "==> Missing envObj.MONGO_USER", options);
+    Assert(options.MONGO_PASSWORD, "==> Missing envObj.MONGO_PASSWORD", options);
 
     //
     const api_port = 3000; // META_PORTS.GetServicePort(packageJson.name);
@@ -98,18 +98,15 @@ export class MongoUtils {
     Logger.Debug(`Mongo Password: ${mongo_password}`);
     Logger.Debug(`Connection Str: ${conn_str}`);
 
-    //
-    mongoose.connect(conn_str)
-      .then(() => {
-        //
-        Logger.Info("Connected to MongoDB");
-        onConnected(api_port);
-      })
-      .catch((err: any) => {
-        //
-        Logger.Fatal(`Error connecting to MongoDB: ${err}`);
-        onError(err);
-      });
+    try {
+      await mongoose.connect(conn_str)
+      Logger.Info("Connected to MongoDB");
+      onConnected(api_port);
+
+    } catch (err: any) {
+      Logger.Fatal(`Error connecting to MongoDB: ${err}`);
+      onError(err);
+    };
   }
 
   //
