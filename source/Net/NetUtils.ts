@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : NetUtils.ts                                                   //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
