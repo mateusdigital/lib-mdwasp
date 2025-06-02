@@ -149,6 +149,10 @@ function _MakeResponse(
     return res.status(baseResponseInitOptions.statusCode);
   }
 
-  return res.status(baseResponseInitOptions.statusCode)
-    .json({baseResponse : base_response, payload : responsePayload});
+  const response: any = { baseResponse: base_response };
+  if (responsePayload && Object.keys(responsePayload).length > 0) {
+    response.payload = responsePayload;
+  }
+
+  return res.status(baseResponseInitOptions.statusCode).json(response);
 }

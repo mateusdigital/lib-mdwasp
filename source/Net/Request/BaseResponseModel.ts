@@ -23,22 +23,22 @@
 export class BaseResponse
 {
   // ---------------------------------------------------------------------------
-  public success: boolean   = false;
-  public statusCode: number = 0;
-  public timestamp: number  = Date.now();
+  public success:    boolean = false;
+  public statusCode: number  = 0;
+  public timestamp:  number  = Date.now();
   //
-  public errorMessage: string = "";
-  public errorCode: number    = 0;
-  public errorPayload: any    = {};
+  public errorMessage?: string|undefined = undefined;
+  public errorCode?:    number|undefined = undefined;
+  public errorPayload?: any|undefined    = undefined;
 
   // ---------------------------------------------------------------------------
   constructor({
     success      = true,
     timestamp    = Date.now(),
     statusCode   = 0,
-    errorMessage = "",
-    errorCode    = 0,
-    errorPayload = {},
+    errorMessage = undefined,
+    errorCode    = undefined,
+    errorPayload = undefined,
   }: Partial<BaseResponse> = {})
   {
     this.success    = success;
