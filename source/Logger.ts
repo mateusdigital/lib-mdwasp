@@ -21,61 +21,40 @@
 //----------------------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 import path, {format} from 'path';
-// -----------------------------------------------------------------------------
-import winston from 'winston';
 
-// -----------------------------------------------------------------------------
-const logFormat = winston.format.printf(({level, message, timestamp, stack}) => {
-  return `${timestamp} [${level.toUpperCase()}]: ${stack || message}`;
-});
 
-// -----------------------------------------------------------------------------
-export class Logger
+export abstract class ILogger
 {
-  static _logger: any;
-  static _httpLevelFilter: any;
+  abstract Debug(...args: any[]): void;
+  abstract Info(...args: any[]): void;
+  abstract Http(...args: any[]): void;
+  abstract Fatal(...args: any[]): void;
+  abstract Error(...args: any[]): void;
 
-  // -----------------------------------------------------------------------------
-  static _CreateLogger()
-  {
-    if (this._logger) {
-      return;
-    }
+  D(...args: any[]): void { this.Debug(...args); }
+  I(...args: any[]): void { this.Info(...args); }
+  H(...args: any[]): void { this.Http(...args); }
+  F(...args: any[]): void { this.Fatal(...args); }
+  E(...args: any[]): void { this.Error(...args); }
+}
 
-    this._logger = winston.createLogger({
-      level : 'debug',
-      format : winston.format.combine(
-        winston.format.timestamp({format : 'YYYY-MM-DD HH:mm:ss'}),
-        winston.format.errors({stack : true}), // Log stack traces
-        logFormat),
-      transports : [
-        new winston.transports.Console(
-          {format : winston.format.colorize({all : true})}),
-      ]
-    });
 
-    winston.addColors({
-      error : 'red',
-      warn : 'yellow',
-      info : 'cyan',
-      http : 'white',
-      debug : 'green'
-    })
+// -----------------------------------------------------------------------------
+export class ConsoleLogger extends ILogger
+{
+  Debug(...args: any[]) { console.debug(...args); }
+  Info(...args: any[]) { console.info(...args); }
+  Http(...args: any[]) { console.log(...args); }
+  Fatal(...args: any[]) {
+    console.error(...args);
+    debugger;
   }
-
-  static Debug(...args: any[]) { this._logger.debug(...args); }
-  static Info(...args: any[]) { this._logger.info(...args); }
-  static Http(...args: any[]) { this._logger.http(...args); }
-  static Fatal(...args: any[]) { this._logger.fatal(...args); }
-  static Error(...args: any[]) { this._logger.error(...args); }
-};
-
-// -----------------------------------------------------------------------------
-export function SetupLogger()
-{
-  //
-  Logger._CreateLogger();
+  Error(...args: any[]) {
+    console.error(...args);
+    // debugger;
+  }
 }
 
 // -----------------------------------------------------------------------------
-SetupLogger();
+export const Logger = new ConsoleLogger();
+export const DefaultLogger = Logger;

@@ -21,8 +21,6 @@
 //----------------------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 import {Error_LogicError, Error_CriticalError, ErrorType} from "./Exceptions";
-// -----------------------------------------------------------------------------
-import {MongoUtils} from "../DB/MongoUtils";
 
 //
 // Functions
@@ -55,17 +53,6 @@ export function ThrowLogicErrorIf(condition: boolean, message: string): void
 //
 //  Check Or Throw
 //
-
-// -----------------------------------------------------------------------------
-export function ThrowIfNotValidObjectId(value: any)
-{
-  if (!MongoUtils.IsValidObjectId(value)) {
-    throw new Error_LogicError(
-      `Not a valid ObjectId: ${value}`,
-      `Not a valid ObjectId: ${value}`,
-    );
-  }
-}
 
 // -----------------------------------------------------------------------------
 export function ThrowIfEmptyOrNull(value: any, msg: string)

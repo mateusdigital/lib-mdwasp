@@ -24,6 +24,7 @@ import mongoose from "mongoose";
 // -----------------------------------------------------------------------------
 import {Assert} from "../Assert";
 import {Logger} from "../Logger";
+import { Error_LogicError } from "../ErrorUtils/Exceptions";
 
 //
 // Types
@@ -137,5 +138,20 @@ export class MongoUtils
   {
     const is_valid = mongoose.Types.ObjectId.isValid(id);
     return is_valid;
+  }
+}
+
+//
+// Throw If
+//
+
+// -----------------------------------------------------------------------------
+export function ThrowIfNotValidObjectId(value: any)
+{
+  if (!MongoUtils.IsValidObjectId(value)) {
+    throw new Error_LogicError(
+      `Not a valid ObjectId: ${value}`,
+      `Not a valid ObjectId: ${value}`,
+    );
   }
 }

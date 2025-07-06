@@ -20,7 +20,7 @@
 //                                                                            //
 //----------------------------------------------------------------------------//
 // -----------------------------------------------------------------------------
-import * as JSON5 from 'json5';
+import JSON5 from "json5";
 
 // -----------------------------------------------------------------------------
 export class JsonUtils
@@ -38,7 +38,7 @@ export class JsonUtils
   static Deserialize(data: string)
   {
     const json_object = JSON5.parse(data);
-    return json_object
+    return json_object;
   }
 }
 
