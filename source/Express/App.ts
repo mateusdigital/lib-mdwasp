@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : App.ts                                                        //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -30,7 +30,7 @@ import {SetupHttpLogger} from "./Middleware/HTTPLogger";
 // -----------------------------------------------------------------------------
 import {
   SetupHeathCheckRoutes,
-  SetupServiceInfoRoutes
+  SetupServiceInfoPage
 } from "../Routes/DefaultRoutes";
 
 //
@@ -77,7 +77,7 @@ export class App
   }
 
   // ---------------------------------------------------------------------------
-  public static Init({corsOptions, publicPath, packageJson}: any)
+  public static Init({corsOptions, publicPath = "", packageJson = {}}: any)
   {
     g_ExpressApp = express();
     g_ExpressApp.use(cors(corsOptions || _CORS_OPTIONS_DEFAULT));
@@ -92,7 +92,7 @@ export class App
     SetupHeathCheckRoutes(
       g_ExpressApp, {packageJson, env : process.env}, "/api");
 
-    SetupServiceInfoRoutes(g_ExpressApp, path.join(publicPath, "index.html"));
+    SetupServiceInfoPage(g_ExpressApp, path.join(publicPath, "index.html"));
   }
 
   // ---------------------------------------------------------------------------

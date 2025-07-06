@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : ThrowIf.ts                                                    //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -53,6 +53,13 @@ export function ThrowLogicErrorIf(condition: boolean, message: string): void
 //
 //  Check Or Throw
 //
+
+// -----------------------------------------------------------------------------
+export function ThrowIfNotAuthorized(auth: any, params: any = {}, msg: string = "Unauthorized")
+{
+  return true;
+}
+
 
 // -----------------------------------------------------------------------------
 export function ThrowIfEmptyOrNull(value: any, msg: string)

@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : ResponseStatus.ts                                             //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -149,6 +149,10 @@ function _MakeResponse(
     return res.status(baseResponseInitOptions.statusCode);
   }
 
-  return res.status(baseResponseInitOptions.statusCode)
-    .json({baseResponse : base_response, payload : responsePayload});
+  const response: any = { baseResponse: base_response };
+  if (responsePayload && Object.keys(responsePayload).length > 0) {
+    response.payload = responsePayload;
+  }
+
+  return res.status(baseResponseInitOptions.statusCode).json(response);
 }

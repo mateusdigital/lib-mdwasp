@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : BaseResponseModel.ts                                          //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -23,22 +23,22 @@
 export class BaseResponse
 {
   // ---------------------------------------------------------------------------
-  public success: boolean   = false;
-  public statusCode: number = 0;
-  public timestamp: number  = Date.now();
+  public success:    boolean = false;
+  public statusCode: number  = 0;
+  public timestamp:  number  = Date.now();
   //
-  public errorMessage: string = "";
-  public errorCode: number    = 0;
-  public errorPayload: any    = {};
+  public errorMessage?: string|undefined = undefined;
+  public errorCode?:    number|undefined = undefined;
+  public errorPayload?: any|undefined    = undefined;
 
   // ---------------------------------------------------------------------------
   constructor({
     success      = true,
     timestamp    = Date.now(),
     statusCode   = 0,
-    errorMessage = "",
-    errorCode    = 0,
-    errorPayload = {},
+    errorMessage = undefined,
+    errorCode    = undefined,
+    errorPayload = undefined,
   }: Partial<BaseResponse> = {})
   {
     this.success    = success;

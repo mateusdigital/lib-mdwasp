@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : DefaultRoutes.ts                                              //
-//  Project   : mdweb                                                         //
+//  Project   : mdwasp                                                         //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -46,7 +46,7 @@ export function SetupHeathCheckRoutes(
 }
 
 // -----------------------------------------------------------------------------
-export function SetupServiceInfoRoutes(app: any, filepath: string)
+export function SetupServiceInfoPage(app: any, filepath: string)
 {
   app.get("/", (req: any, res: any) => { res.sendFile(filepath); });
 }
