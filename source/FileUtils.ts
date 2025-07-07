@@ -22,8 +22,6 @@
 
 // -----------------------------------------------------------------------------
 import fs from "fs";
-import path from "path";
-import { pathToFileURL } from "url";
 // -----------------------------------------------------------------------------
 import { Assert } from "./Assert";
 import { Error_CriticalError } from "./ErrorUtils/Exceptions";
@@ -44,12 +42,13 @@ export class FileUtils {
     return FileUtils.ForwardSlash(joined);
   }
 
-
+  // ---------------------------------------------------------------------------
   static CopyDir(src: string, dest: string, options: { force: boolean } = { force: false }) {
     Assert(src, "Source path can't be null");
     Assert(dest, "Destination path can't be null");
     Assert(src !== dest, "Source and destination paths can't be the same");
     Assert(FileUtils.DirExists(src), `Source directory does not exist: ${src}`);
+
     if (!options.force) {
       Assert(!FileUtils.DirExists(dest), `Destination directory already exists: ${dest}`);
     }
@@ -59,36 +58,11 @@ export class FileUtils {
       force: options.force
     });
   }
-  // -----------------------------------------------------------------------------
-  static GetDirname(p: string) {
-    return path.dirname(p) as string;
-  }
-  // ---------------------------------------------------------------------------
-  static GetFilename(p: string) {
-    return path.basename(p) as string
-  }
-
-  // ---------------------------------------------------------------------------
-  static ForwardSlash(path: string) {
-    return path.replaceAll("\\", "/");
-  }
-
-  // ---------------------------------------------------------------------------
-  static BackSlash(path: string) {
-    return path.replaceAll("/", "\\");
-  }
 
   // ---------------------------------------------------------------------------
   static GetCwd() {
     const cwd = process.cwd();
     return cwd;
-  }
-
-
-  // ---------------------------------------------------------------------------
-  static PathToUrl(path: string): string {
-    const url = pathToFileURL(path);
-    return url.href.toString();
   }
 
   // ---------------------------------------------------------------------------
