@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : Utils.ts                                                      //
-//  Project   : mdwasp                                                         //
+//  Project   : mdwasp                                                        //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -23,6 +23,7 @@
 import {DTO_METADATA_KEY} from "./DTO/DTOUtils";
 import {IS_PRODUCTION_ENVIRONMENT} from "./Environments";
 
+// -----------------------------------------------------------------------------
 export function As<T>(m: any): T { return m as T; }
 
 // -----------------------------------------------------------------------------

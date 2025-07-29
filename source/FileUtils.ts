@@ -22,8 +22,6 @@
 
 // -----------------------------------------------------------------------------
 import fs from "fs";
-import path from "path";
-import { pathToFileURL } from "url";
 // -----------------------------------------------------------------------------
 import { Assert } from "./Assert";
 import { Error_CriticalError } from "./ErrorUtils/Exceptions";
@@ -55,6 +53,7 @@ export class FileUtils {
     Assert(dest, "Destination path can't be null");
     Assert(src !== dest, "Source and destination paths can't be the same");
     Assert(FileUtils.DirExists(src), `Source directory does not exist: ${src}`);
+
     if (!options.force) {
       Assert(!FileUtils.DirExists(dest), `Destination directory already exists: ${dest}`);
     }
