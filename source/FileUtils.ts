@@ -30,8 +30,13 @@ import { Error_CriticalError } from "./ErrorUtils/Exceptions";
 import { ThrowCriticalErrorIf } from "./ErrorUtils/ThrowIf";
 
 
+//
+//
+//
+
 // -----------------------------------------------------------------------------
 export class FileUtils {
+
   // ---------------------------------------------------------------------------
   static JoinPath(
     base: string,
@@ -44,7 +49,7 @@ export class FileUtils {
     return FileUtils.ForwardSlash(joined);
   }
 
-
+  // ---------------------------------------------------------------------------
   static CopyDir(src: string, dest: string, options: { force: boolean } = { force: false }) {
     Assert(src, "Source path can't be null");
     Assert(dest, "Destination path can't be null");
@@ -59,13 +64,14 @@ export class FileUtils {
       force: options.force
     });
   }
+
   // -----------------------------------------------------------------------------
   static GetDirname(p: string) {
     return path.dirname(p) as string;
   }
   // ---------------------------------------------------------------------------
   static GetFilename(p: string) {
-    return path.basename(p) as string
+    return path.basename(p) as string;
   }
 
   // ---------------------------------------------------------------------------
@@ -83,7 +89,6 @@ export class FileUtils {
     const cwd = process.cwd();
     return cwd;
   }
-
 
   // ---------------------------------------------------------------------------
   static PathToUrl(path: string): string {
@@ -171,7 +176,6 @@ export class FileUtils {
       throw Error_CriticalError.FromCatchClauseError(error);
     }
   }
-
 
   // ---------------------------------------------------------------------------
   static Stat(filename: string) {
