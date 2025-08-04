@@ -26,17 +26,20 @@ import Joi from "joi";
 //
 
 // -----------------------------------------------------------------------------
-interface IRouteOptions
-{
+interface IRouteOptions {
   route?: string;
   schema?: any;
+  requiresAuth?: boolean;
   useDBTransaction?: boolean;
+
+  paramsSchema?: Joi.ObjectSchema;
+  bodySchema?: Joi.ObjectSchema;
+  querySchema?: Joi.ObjectSchema;
 }
 
 // -----------------------------------------------------------------------------
-function _DefaultRouteOptions(): IRouteOptions
-{
-  return {route : '/', schema : null, useDBTransaction : false};
+function _DefaultRouteOptions(): IRouteOptions {
+  return { route: '/', schema: null, useDBTransaction: false };
 }
 
 //
@@ -44,62 +47,65 @@ function _DefaultRouteOptions(): IRouteOptions
 //
 
 // -----------------------------------------------------------------------------
-export function GET(options: IRouteOptions = _DefaultRouteOptions())
-{
-  return function(
-    target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function GET(options: IRouteOptions = _DefaultRouteOptions()) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.routes) {
       target.routes = [];
     }
 
-    const {route, schema, useDBTransaction} = options;
+    const { route, bodySchema, paramsSchema, querySchema, useDBTransaction } = options;
+
     target.routes.push({
-      method : 'get',
+      method: 'get',
       route,
-      handler : descriptor.value,
-      schema,
+      handler: descriptor.value,
+      paramsSchema,
+      querySchema,
+      bodySchema,
       useDBTransaction
     });
   };
 }
 
 // -----------------------------------------------------------------------------
-export function POST(options: IRouteOptions = _DefaultRouteOptions())
-{
-  return function(
+export function POST(options: IRouteOptions = _DefaultRouteOptions()) {
+  return function (
     target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.routes) {
       target.routes = [];
     }
 
-    const {route, schema, useDBTransaction} = options;
+    const { route, bodySchema, paramsSchema, querySchema, useDBTransaction } = options;
 
     target.routes.push({
-      method : 'post',
+      method: 'post',
       route,
-      handler : descriptor.value,
-      schema,
+      handler: descriptor.value,
+      paramsSchema,
+      querySchema,
+      bodySchema,
       useDBTransaction
     });
   };
 }
 
 // -----------------------------------------------------------------------------
-export function DELETE(options: IRouteOptions = _DefaultRouteOptions())
-{
-  return function(
+export function DELETE(options: IRouteOptions = _DefaultRouteOptions()) {
+  return function (
     target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.routes) {
       target.routes = [];
     }
 
-    const {route, schema, useDBTransaction} = options;
+    const { route, bodySchema, paramsSchema, querySchema, useDBTransaction } = options;
 
     target.routes.push({
-      method : 'delete',
+      method: 'delete',
       route,
-      handler : descriptor.value,
-      schema,
+      handler: descriptor.value,
+      paramsSchema,
+      querySchema,
+      bodySchema,
       useDBTransaction
     });
   };
