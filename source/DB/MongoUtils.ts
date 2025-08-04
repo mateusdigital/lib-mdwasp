@@ -25,6 +25,7 @@ import mongoose from "mongoose";
 // -----------------------------------------------------------------------------
 import { Assert } from "../Assert";
 import { Logger } from "../Logger";
+import { Error_LogicError } from "../ErrorUtils/Exceptions";
 
 
 //
@@ -42,7 +43,8 @@ export type SoftObjectId = mongoose.ObjectId | string | unknown;
 interface ConnectionOptions {
   MONGO_URI: string,
   MONGO_USER: string,
-  MONGO_PASSWORD: string
+  MONGO_PASSWORD: string,
+  PORT: string | number
 }
 
 
@@ -69,19 +71,18 @@ export class MongoUtils {
   // Connection
   //
 
-
-
   // ---------------------------------------------------------------------------
   static async MakeMongooseConnect(options: ConnectionOptions,
-    onConnected: any = (port: number) => {},
-    onError: any = (err: any) => {}) {
+    onConnected: any = (port: number) => { },
+    onError: any = (err: any) => { }) {
     //
-    Assert(options.MONGO_URI, `==> Missing envObj.MONGO_URI`, options);
-    Assert(options.MONGO_USER, "==> Missing envObj.MONGO_USER", options);
-    Assert(options.MONGO_PASSWORD, "==> Missing envObj.MONGO_PASSWORD", options);
+    Assert(options.MONGO_URI, `==> Missing MONGO_URI`, options);
+    Assert(options.MONGO_USER, "==> Missing MONGO_USER", options);
+    Assert(options.MONGO_PASSWORD, "==> Missing MONGO_PASSWORD", options);
+    Assert(options.PORT, "==> Missing PORT", options);
 
     //
-    const api_port = 3000; // META_PORTS.GetServicePort(packageJson.name);
+    const api_port = Number(options.PORT);
 
     const mongo_uri = options.MONGO_URI as string;
     const mongo_user = options.MONGO_USER as string;
@@ -126,8 +127,7 @@ export class MongoUtils {
 //
 
 // -----------------------------------------------------------------------------
-export function ThrowIfNotValidObjectId(value: any)
-{
+export function ThrowIfNotValidObjectId(value: any) {
   if (!MongoUtils.IsValidObjectId(value)) {
     throw new Error_LogicError(
       `Not a valid ObjectId: ${value}`,
