@@ -10,7 +10,7 @@
 //                      O      *        '       .                             //
 //                                                                            //
 //  File      : FileUtils.ts                                                  //
-//  Project   : mdwasp                                                         //
+//  Project   : mdwasp                                                        //
 //  Date      : 2025-03-24                                                    //
 //  License   : See project's COPYING.TXT for full info.                      //
 //  Author    : mateus.digital <hello@mateus.digital>                         //
@@ -22,10 +22,14 @@
 
 // -----------------------------------------------------------------------------
 import fs from "fs";
+import path from "path";
 // -----------------------------------------------------------------------------
 import { Assert } from "./Assert";
 import { Error_CriticalError } from "./ErrorUtils/Exceptions";
 import { ThrowCriticalErrorIf } from "./ErrorUtils/ThrowIf";
+import { PathUtils } from "./PathUtils";
+import { pathToFileURL } from "url";
+// -----------------------------------------------------------------------------
 
 
 //
@@ -35,17 +39,6 @@ import { ThrowCriticalErrorIf } from "./ErrorUtils/ThrowIf";
 // -----------------------------------------------------------------------------
 export class FileUtils {
 
-  // ---------------------------------------------------------------------------
-  static JoinPath(
-    base: string,
-    ...paths: string[]
-  ) {
-    Assert(base, "Base path can't be null");
-    Assert(paths.length > 0, "Paths can't be empty");
-
-    const joined = path.join(base, ...paths);
-    return FileUtils.ForwardSlash(joined);
-  }
 
   // ---------------------------------------------------------------------------
   static CopyDir(src: string, dest: string, options: { force: boolean } = { force: false }) {
@@ -62,25 +55,6 @@ export class FileUtils {
       recursive: true,
       force: options.force
     });
-  }
-
-  // -----------------------------------------------------------------------------
-  static GetDirname(p: string) {
-    return path.dirname(p) as string;
-  }
-  // ---------------------------------------------------------------------------
-  static GetFilename(p: string) {
-    return path.basename(p) as string;
-  }
-
-  // ---------------------------------------------------------------------------
-  static ForwardSlash(path: string) {
-    return path.replaceAll("\\", "/");
-  }
-
-  // ---------------------------------------------------------------------------
-  static BackSlash(path: string) {
-    return path.replaceAll("/", "\\");
   }
 
   // ---------------------------------------------------------------------------
@@ -119,28 +93,30 @@ export class FileUtils {
 
 
     dirPath = path.resolve(dirPath);
-    let files = fs.readdirSync(dirPath, { recursive: options.recursive });
+    let files: any = fs.readdirSync(dirPath, { recursive: options.recursive });
     if (options.fullpaths) {
       files = files.map(_name => path.join(dirPath, _name as string));
     }
 
 
     if (!options.returnFiles || !options.returnDirs) {
-      files = files.filter(file => {
+      files = files.filter((file:string|any) => {
         if (options.returnFiles && options.returnDirs) {
           return true; // Return all files and directories
         }
 
         const stat = FileUtils.Stat(file);
-        if (options.returnFiles && stat.isFile()) {
+        if (options.returnFiles && stat?.isFile()) {
           return true;
         }
-        if (options.returnDirs && stat.isDirectory()) {
+        if (options.returnDirs && stat?.isDirectory()) {
           return true;
         }
+
         return false; // Should not happen, but just in case
       });
     }
+
     return files;
   }
 
@@ -148,7 +124,9 @@ export class FileUtils {
   // ---------------------------------------------------------------------------
   static EnsurePath(dirPath: string,
     options: { isDir: boolean } = { isDir: false }) {
-    const base_path = (options.isDir) ? dirPath : path.dirname(dirPath);
+    const base_path = (options.isDir)
+      ? dirPath
+      : PathUtils.GetDirname(dirPath, { forceForward: true });
     fs.mkdirSync(base_path, { recursive: true });
   }
 

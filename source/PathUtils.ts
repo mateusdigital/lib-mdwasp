@@ -1,6 +1,24 @@
+import { sep } from "path";
 import { Arr } from "./Arr";
+import { Assert } from "./Assert";
 
+//
+//
+//
+
+// -----------------------------------------------------------------------------
 export class PathUtils {
+  // ---------------------------------------------------------------------------
+  static JoinPath(
+    base: string,
+    ...paths: string[]
+  ) {
+    Assert(base, "Base path can't be null");
+    Assert(paths.length > 0, "Paths can't be empty");
+
+    const joined = base + "/" + paths.join("/");
+    return joined;
+  }
 
   // ---------------------------------------------------------------------------
   static GetExtension(path: string): string {
@@ -9,31 +27,32 @@ export class PathUtils {
 
 
   // ---------------------------------------------------------------------------
-  static GetDirname(p: string,
-    options: { pathSeparator: string, forceForward: boolean } = {
-      pathSeparator: "/", forceForward: false
-    }) {
-
+  static GetDirname(
+    p: string,
+    options: { pathSeparator?: string, forceForward?: boolean }
+  ) {
     //
     if (options.forceForward) {
       p = PathUtils.ForwardSlash(p);
     }
 
-    const comps = p.split(options.pathSeparator);
+    const separator = options.pathSeparator || "/";
+    const comps = p.split(separator);
     if (comps.length < 2) {
       return p;
     }
 
     comps.pop();
 
-    p = comps.join(options.pathSeparator);
+    p = comps.join(separator);
     return p;
   }
 
   // ---------------------------------------------------------------------------
   static GetFilename(p: string,
     options: { pathSeparator: string, forceForward: boolean } = {
-      pathSeparator: "/", forceForward: false
+      pathSeparator: "/",
+      forceForward: false
     }) {
     //
     if (options.forceForward) {
@@ -59,6 +78,7 @@ export class PathUtils {
     return path.replaceAll("/", "\\");
   }
 
+  // ---------------------------------------------------------------------------
   static PathToUrl(path: string): string {
     if (typeof window === "undefined") {
       return pathToFileURL(path).toString();
@@ -67,6 +87,7 @@ export class PathUtils {
     }
   }
 
+  // ---------------------------------------------------------------------------
   static Join(...paths: string[]): string {
     if (paths.length === 0) {
       return "";
